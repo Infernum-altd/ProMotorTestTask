@@ -1,0 +1,85 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+  <div fxFlex="25"></div>
+  <div>
+    <div fxLayout="column" fxLayoutAlign="center start" class="input">
+
+      <div fxLayout="row">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Search by string</mat-label>
+            <label>
+              <input matInput type="text" [(ngModel)]="searchValue">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <button mat-raised-button color="primary" class="btn-near-input" (click)="searchRecords(searchValue)">Поиск</button>
+        </div>
+        <div>
+          <button mat-raised-button color="primary" class="btn-near-input" (click)="isAddFieldOpen=!isAddFieldOpen">{{isAddFieldOpen ? 'Закрыть' : 'Добавить запись'}}</button>
+        </div>
+      </div>
+
+      <div fxLayout="row" *ngIf="isAddFieldOpen">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>New value</mat-label>
+            <label>
+              <input matInput type="text" [(ngModel)]="newRecord">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <button mat-raised-button color="primary" class="btn-near-input" (click)="saveRecord(newRecord)">Сохранить</button>
+        </div>
+
+
+      </div>
+
+      <div>
+        <mat-table [dataSource]="dataSource">
+          <div>
+            <mat-header-row *matHeaderRowDef="displayedColumns;" class="mat-elevation-z1"></mat-header-row>
+          </div>
+
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mwlResizable [enableGhostResize]="true"
+                             (resizeEnd)="onResizeEnd($event, 'id')"
+                             [resizeEdges]="{bottom: false, right: true, top: false, left: true}">Id</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{row.id}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef mwlResizable [enableGhostResize]="true"
+                             (resizeEnd)="onResizeEnd($event, 'value')"
+                             [resizeEdges]="{bottom: false, right: true, top: false, left: true}">Value</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <mat-form-field floatLabel="never">
+                <input matInput placeholder="value" [value]="row.value" [(ngModel)]="row.value">
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef mwlResizable [enableGhostResize]="true"
+                             (resizeEnd)="onResizeEnd($event, 'actions')"
+                             [resizeEdges]="{bottom: false, right: true, top: false, left: true}"> Actions</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <button mat-raised-button class="btn-edit" (click)="editRecord(row)">Edit</button>
+              <button mat-raised-button class="btn-remove" (click)="removeRecord(row)">Remove</button>
+            </mat-cell>
+          </ng-container>
+          <mat-row id="row-{{index}}" *matRowDef="let row; columns: displayedColumns; let index = index;">
+          </mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="20"></div>
+</div>
+
+
+
+
